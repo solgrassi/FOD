@@ -13,6 +13,9 @@ usuario.}
 
 program Ejercicio3;
 uses crt;
+const
+     impo = -1;
+
 type
 emple = record
       num:integer;
@@ -41,13 +44,28 @@ begin
      end;
 end;
 
+procedure asignarArchivo(var asigno: boolean);
+var
+nom_fisico: string;
+begin
+     writeln('Ingrese el nombre del archivo');
+     readln(nom_fisico);
+     assign(empleados, nom_fisico);
+     asigno:= false;
+end;
+
+procedure leerHastaFin(var reg:emple);
+begin
+     if (not EOF(empleados)) then
+           read(empleados, reg)
+     else
+         reg.num := -1;
+end;
+
 procedure crearArchivo;
 var
-nom_fisico:string; emple:emple;
+emple:emple;
 begin
-writeln('Ingrese el nombre del archivo');
-readln(nom_fisico);
-assign(empleados, nom_fisico);
 rewrite(empleados);
 leerEmple(emple);
 while (emple.ape <> 'fin') do begin
@@ -59,26 +77,27 @@ end;
 
 procedure informarEmpleado (e:emple);
 begin
-      writeln('Numero: ', e.num);
-      writeln('Nombre: ', e.nom);
-      writeln('Apellido: ', e.ape);
-      writeln('Edad: ', e.edad);
-      writeln('DNI: ', e.dni);
+      write('Numero: ', e.num);
+      write('. Nombre: ', e.nom);
+      write('. Apellido: ', e.ape);
+      write('. Edad: ', e.edad);
+      writeln('. DNI: ', e.dni);
       writeln('-------------------------');
 end;
 
 procedure listarNombre;
 var
 nombre:string;
-registro:emple;
+aux:emple;
 begin
 writeln('ingrese el nombre o apellido a buscar');
 readln(nombre);
 reset(empleados);
-while not(EOF(empleados)) do begin
-      read(empleados,registro);
-      if (registro.nom = nombre) or (registro.ape=nombre) then
-         informarEmpleado(registro);
+leerHastaFin(aux);
+while (aux.num <> impo) do begin
+      if (aux.nom = nombre) or (aux.ape=nombre) then
+         informarEmpleado(aux);
+      leerHastaFin(aux);
 end;
 close(empleados);
 end;
@@ -89,30 +108,33 @@ var
 emple:emple;
 begin
 reset(empleados);
-while not(EOF(empleados)) do begin
-     read(empleados,emple);
+leerHastaFin(emple);
+while (emple.num<> impo) do begin
      informarEmpleado(emple);
+     leerHastaFin(emple);
 end;
 close(empleados);
 end;
 
 procedure listarJubilados;
 var
-empleado:emple;
+emp:emple;
 begin
 reset(empleados);
-while not(EOF(empleados)) do begin
-      read(empleados, empleado);
-      if (empleado.edad >70) then
-         informarEmpleado(empleado);
+leerHastaFin(emp);
+while (emp.num<> impo) do begin
+      if (emp.edad >70) then
+         informarEmpleado(emp);
+      leerHastaFin(emp);
 end;
 close (empleados);
 end;
 
 
 var
-opcion: integer;
+opcion: integer;  asigno: boolean;
 begin
+  asigno:=True;
   repeat
   writeln('Menu de opciones');
   writeln('1. Crear archivo de empleados');
@@ -122,6 +144,8 @@ begin
   writeln('5. Salir');
   writeln('Ingrese el numero de opcion a realizar (1-5)');
   readln(opcion);
+  if (asigno) then
+     asignarArchivo(asigno);
   case opcion of
        1: crearArchivo;
        2: listarNombre;
