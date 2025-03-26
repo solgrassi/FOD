@@ -230,7 +230,7 @@ begin
    leerHastaFin(reg);
    while (reg.num <> impo) do begin
          if (reg.dni = 00) then begin
-             write(arcDNI,reg.num,' ' ,reg.edad,' ' ,reg.dni,'  ',reg.nom);
+             write(arcDNI,reg.num,' ' ,reg.edad,' ' ,reg.dni,'  ',reg.nom,' ');
              writeln(arcDNI, reg.ape);
          end;
          leerHastaFin(reg);
