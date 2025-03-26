@@ -253,7 +253,7 @@ begin
   writeln('4. listar proximos a jubilarse');
   writeln('5. agregar empelado/s');
   writeln('6. modificar la edad de un empelado');
-  writeln('7. exportar todos los empelados a un archivo de texto');
+  writeln('7. exportar todos los empleados a un archivo de texto');
   writeln('8. exportar los empleados sin dni a un archivo de texto');
   writeln('9. Salir');
   writeln('Ingrese el numero de opcion a realizar (1-9)');
