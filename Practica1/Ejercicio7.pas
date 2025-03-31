@@ -23,7 +23,10 @@ novela = record
     nombre: string;
 end;
 
-procedure asignarArchivo (var arc: file of novela; var asignar:boolean);
+archivo = file of novela; 
+texto = text;
+
+procedure asignarArchivo (var arc: archivo; var asignar:boolean);
 var
 nom_fisico:string;
 begin
@@ -33,7 +36,7 @@ begin
      asignar:= false;
 end;
 
-procedure crearArchivo (var arc: file of novela; var novelas:text);
+procedure crearArchivo (var arc: archivo; var novelas:txt);
 var
 reg:novela;
 begin
@@ -61,7 +64,7 @@ begin
 end;
 
 
-procedure agregarNovela (var arc:file of novela);
+procedure agregarNovela (var arc:archivo);
 var
 reg,aux:novela;
 sigue:boolean;
@@ -94,7 +97,7 @@ begin
       writeln(n.genero);
 end;
 
-procedure modificarNovela (var arc: file of novela);
+procedure modificarNovela (var arc: archivo);
 var
 cod:integer;
 sigue: boolean;
@@ -124,8 +127,8 @@ begin
 
 
 var
-archivo: file of novela;
-txt: text;
+arc: archivo;
+txt: texto;
 opcion:integer;
 asigno:boolean;
 begin
@@ -138,11 +141,11 @@ begin
      writeln('4. Salir');
      readln(opcion);
      if (asigno) then
-        asignarArchivo(archivo,asigno);
+        asignarArchivo(arc,asigno);
      case opcion of
-          1: crearArchivo(archivo,txt);
-          2: agregarNovela(archivo);
-          3: modificarNovela(archivo);
+          1: crearArchivo(arc,txt);
+          2: agregarNovela(arc);
+          3: modificarNovela(arc);
           4: writeln('Saliendo del programa...');
      else
          writeln('ingrese una opcion válida (1-4)');
