@@ -1,22 +1,22 @@
-{Se desea modelar la informaci髇 de una ONG dedicada a la asistencia de personas con 
-carencias habitacionales. La ONG cuenta con un archivo maestro conteniendo informaci髇 
-como se indica a continuaci髇: C骴igo pcia, nombre provincia, c骴igo de localidad, nombre 
+ {Se desea modelar la informaci贸n de una ONG dedicada a la asistencia de personas con
+carencias habitacionales. La ONG cuenta con un archivo maestro conteniendo informaci贸n 
+como se indica a continuaci贸n: C贸digo pcia, nombre provincia, c贸digo de localidad, nombre 
 de localidad, #viviendas sin luz, #viviendas sin gas, #viviendas de chapa, #viviendas sin 
 agua, # viviendas sin sanitarios.  
 Mensualmente reciben detalles de las diferentes provincias indicando avances en las obras 
-de ayuda en la edificaci髇 y equipamientos de viviendas en cada provincia. La informaci髇 
-de los detalles es la siguiente: C骴igo pcia, c骴igo localidad, #viviendas con luz, #viviendas 
+de ayuda en la edificaci贸n y equipamientos de viviendas en cada provincia. La informaci贸n 
+de los detalles es la siguiente: C贸digo pcia, c贸digo localidad, #viviendas con luz, #viviendas 
 construidas, #viviendas con agua, #viviendas con gas, #entrega sanitarios. 
 Se debe realizar el procedimiento que permita actualizar el maestro con los detalles 
-recibidos, se reciben 10 detalles. Todos los archivos est醤 ordenados por c骴igo de 
-provincia y c骴igo de localidad.  
-Para la actualizaci髇 del archivo maestro, se debe proceder de la siguiente manera:  
+recibidos, se reciben 10 detalles. Todos los archivos est谩n ordenados por c贸digo de 
+provincia y c贸digo de localidad.  
+Para la actualizaci贸n del archivo maestro, se debe proceder de la siguiente manera:  
 - Al valor de viviendas sin luz se le resta el valor recibido en el detalle.
 - Idem para viviendas sin agua, sin gas y sin sanitarios.
 - A las viviendas de chapa se le resta el valor recibido de viviendas construidas
-La misma combinaci髇 de  provincia y localidad aparecen a lo sumo una 鷑ica vez. 
+La misma combinaci贸n de  provincia y localidad aparecen a lo sumo una 煤nica vez. 
 Realice las declaraciones necesarias, el programa principal y los procedimientos que 
-requiera para la actualizaci髇 solicitada e informe cantidad de localidades sin viviendas de 
+requiera para la actualizaci贸n solicitada e informe cantidad de localidades sin viviendas de 
 chapa (las localidades pueden o no haber sido actualizadas).
 }
 program ejercicio15;
@@ -77,13 +77,15 @@ i,indice: integer;
 begin
      min.codPro:= impo;
      min.codLoca:= impo;
+     indice:= -1;
      for i:= 1 to df do begin
          if (r[i].codPro < min.codPro) or ((r[i].codPro = min.codPro) and (r[i].codLoca < min.codLoca)) then begin
             indice:= i;
             min:= r[i];
          end;
      end;
-     leer(det[indice], r[indice]);
+     if (indice <> -1) then
+         leer(det[indice], r[indice]);
 end;
 
 
@@ -100,7 +102,7 @@ begin
          leer(det[i],r[i]);
      end;
      minimo(det,r, min);
-     while (min.codPro <> impo) do begin
+     while (not EOF(mae)) do begin
            read(mae,regMae);
            if (regMae.codPro = min.codPro)and (regMae.codLoca = min.codLoca) then begin
                      regMae.sinLuz:= regMae.sinLuz - min.conLuz;
@@ -108,16 +110,11 @@ begin
                      regMae.sinSani:= regMae.sinSani - min.conSani;
                      regMae.sinGas:= regMae.sinGas - min.conGas;
                      regMae.deChapa:= regMae.deChapa - min.construidas;
+                     seek(mae, filepos(mae)-1);
+                     write(mae,regMae);
                      minimo(det,r,min);
            end;
-           seek(mae, filepos(mae)-1);
-           write(mae,regMae);
            if (regMae.deChapa = 0) then
-              locaSinChapa := locaSinChapa + 1;
-    end;
-    while (not EOF(mae)) do begin
-         read(mae, regMae);
-         if (regMae.deChapa = 0) then
               locaSinChapa := locaSinChapa + 1;
     end;
     close(mae);
@@ -135,4 +132,3 @@ begin
      asignarArchivos(mae,deta);
      actualizarMaestro(mae,deta,r);
 end.
-
